@@ -24,3 +24,15 @@ spec:
     # container.ports 最後 ports 的部分則是可以指定，該 container 有哪些 port number 是允許外部資源存取，而在這裡我們只允許container  中的 port 3000 對外開放。
     ports:
     - containerPort: 3000
+    # 透過 env 的方式使用 secrets
+    env:
+    - name: SECRET_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: demo-secret-from-yaml
+          key: username
+    - name: SECRET_PASSWORD
+      valueFrom:
+        secretKeyRef:
+         name: demo-secret-from-yaml
+         key: password
