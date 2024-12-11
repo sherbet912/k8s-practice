@@ -1,0 +1,31 @@
+# app/v1 if kubectl version >= 1.9 else apps/v1beta2
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-replica-set
+spec:
+  replicas: 3
+  selector:
+    # 在 Replica Set 的 selector 裡面提供了 matchLabels，matchLabels 的用法代表著等於(equivalent)，代表 Pod 的 labels 必須與 matchLabels 中指定的值相同，才算符合條件。
+    matchLabels:
+      env: dev
+    # 而 matchExpressions 的用法較為彈性，每一筆條件主要由三個部分組成 key, operator，value。
+    # 目前 operator 支援 4 種條件 In, NotIn, Exists, 以及 DoesNotExis
+    # 以下面敘述為例，我們指定 Pod 的條件為
+    # 1. env 必須為 dev 2
+    # 2. env 不能為 prod
+    matchExpressions:
+      - {key: env, operator: In, values: [dev]}
+      - {key: env, operator: NotIn, values: [prod]}
+    template:
+      metadata:
+        labels:
+          app: hello-pod-v1
+          env: dev
+          version: v1
+      spec:
+        containers:
+        - name: my-pod
+          image: chouchuanyi12/k8s-demo
+          ports:
+          - containerPort: 3000
