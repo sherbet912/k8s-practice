@@ -1,0 +1,21 @@
+# k8s 中該元件的版本號. 這個例子 Pod 是 v1 版本
+apiVersion: v1
+kind: Pod
+# metadata 中有三個重要的 key, 分別是 name, labels, annotations
+metadata:
+  # 在 metadata.name 指定 Pod 的名稱
+  name: my-pod
+  # metadata.labels 是 k8s 核心元件之一, k8s 會透過 label selector 將 Pod 做分群管理
+  labels:
+    app: webserver
+  # annotations 的功能與 labels 相似。相較於labels，annotations 通常是使用者自定義的附加資訊，提供外部進行查詢使用，像是版本號，發布日期等等。
+# 在 spec 中定義 container
+spec:
+  containers:
+  # container.name 設定 container 的名稱
+  - name: pod-demo
+  # container.image 定義 container 所使用的 image, 根據 docker registry 提供的可下載路徑
+    image: chouchuanyi12/k8s-demo
+    # container.ports 最後 ports 的部分則是可以指定，該 container 有哪些 port number 是允許外部資源存取，而在這裡我們只允許container  中的 port 3000 對外開放。
+    ports:
+    - containerPort: 3000
