@@ -1,0 +1,24 @@
+# Service 使用的 Kubernetes API 是 v1 版本號
+apiVersion: v1
+kind: Service
+metadata:
+  # 指定 Service 的名稱
+  name: hello-service
+spec:
+  # 指定 Service 的型別，可以是 NodePort 或是 LoadBalancer
+  type: NodePort
+  ports:
+  # 指定創建的 Service 的 Cluster IP，是哪個 port number 去對應到 targetPort
+  - port: 3000
+    # 指定 Node 物件是哪一個 port numbrt，去對應到 targetPort
+    # 若是在 Service 的設定檔中沒有指定的話，Kubernetes 會隨機幫我們選一個 port number
+    nodePort: 30390
+    # 目前 Service 支援 TCP 與 UDP 兩種 protocl，預設為 TCP
+    protocol: TCP
+    # targetPort 是我們指定的 Pod 的 port number
+    # 由於我們會在 Pod 中運行一個 port number 3000 的 web container
+    # 所以我們指定 hello-service 的特定 port number 都可以導到該 web container。
+    targetPort: 3000
+  # selector 則會幫我們過濾，在範例中，我們創建的 Service 會將特定的 port number 收到的流量導向 標籤為 app=my-deployment 的 Pods
+  selector:
+    app: my-deployment
