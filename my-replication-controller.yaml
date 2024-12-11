@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: my-replication-controller
+spec:
+  # 定義 pod 數量
+  replicas: 3
+  # 選擇的 pod 的條件(lables)
+  selector:
+    app: hello-pod-v1
+  # 定義每個 pod 的相關設定, 包含Pod的labels以及Pod中要運行的container
+  template:
+    # pod 的 labels
+    metadata:
+      # metadata.labels 必須被包含在 select 中, 否則在創建 Replication Controller 物件時, 會發生 error
+      labels:
+        app: hello-pod-v1
+    # 定義 container
+    spec:
+      containers:
+      - name: my-pod
+        image: chouchuanyi12/k8s-demo
+        ports:
+        - containerPort: 3000
